@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wedding RSVP</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #fff0f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: #ffffff;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+    h1 {
+      text-align: center;
+      color: #d6336c;
+      margin-bottom: 20px;
+      font-family: 'Georgia', serif;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #333;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 25px;
+      background: #d6336c;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #c1275b;
+    }
+    #response {
+      margin-top: 20px;
+      font-weight: bold;
+      text-align: center;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>RSVP for Our Wedding</h1>
+  <form id="rsvpForm">
+    <label>Name:</label>
+    <input type="text" name="name" placeholder="Your full name" required>
+
+    <label>Will you attend?</label>
+    <select name="attendance" required>
+      <option value="">Select</option>
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+    </select>
+
+    <label>Number of Guests:</label>
+    <input type="number" name="guests" min="1" placeholder="Number of attendees">
+
+    <button type="submit">Submit RSVP</button>
+  </form>
+
+  <p id="response"></p>
+</div>
+
+<script>
+const form = document.getElementById('rsvpForm');
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  const data = new FormData(form);
+
+  fetch('https://script.google.com/macros/s/AKfycbzg8SJ76QmYBxKuQ_XV539gZtJ42tfrlilNcqyeYJMeBAVbIv07oOHBgaQqjzenyKng/exec', {
+    method: 'POST',
+    body: data
+  })
+  .then(res => res.text())
+  .then(msg => {
+    document.getElementById('response').innerText = msg;
+    form.reset();
+  })
+  .catch(err => {
+    document.getElementById('response').innerText = 'Error submitting RSVP.';
+    console.error(err);
+  });
+});
+</script>
+
+</body>
+</html>
