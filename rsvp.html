@@ -2,159 +2,377 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wedding RSVP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Great+Vibes&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;600&display=swap');
-
     body {
       font-family: 'Playfair Display', serif;
-      background: linear-gradient(to right, #fff0f5, #ffe4e1);
-      text-align: center;
-      padding: 20px;
-      color: #4b2e2e;
+      background: linear-gradient(to bottom right, #fbeaea, #fdf6f0);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
       margin: 0;
+      padding: 20px;
     }
-
     .container {
-      max-width: 500px;
-      margin: 20px auto;
       background: #fff;
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.15);
+      width: 100%;
+      max-width: 520px;
+      text-align: center;
+      position: relative;
+      animation: fadeIn 0.8s ease;
     }
-
-    h1 {
+    h2 {
       font-family: 'Great Vibes', cursive;
-      font-size: 36px;
+      font-size: 40px;
       color: #b76e79;
       margin-bottom: 10px;
     }
-
-    p {
-      font-size: 18px;
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      margin: 12px 0 6px;
-      font-weight: 600;
+    p.subtitle {
       font-size: 16px;
+      color: #666;
+      margin-bottom: 25px;
     }
-
-    input[type="text"],
-    textarea,
-    button {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 12px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px; /* Prevent iOS zoom */
+    input[type="text"], textarea {
+      width: 90%;
+      padding: 12px 15px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+      font-family: 'Playfair Display', serif;
+      transition: border-color .3s;
     }
-
+    input:focus, textarea:focus {
+      border-color: #b76e79;
+      outline: none;
+      box-shadow: 0 0 6px rgba(183, 110, 121, 0.3);
+    }
     textarea {
-      resize: none;
-      height: 80px;
+      resize: vertical;
+      min-height: 80px;
     }
-
     button {
-      background: #b76e79;
-      color: white;
+      padding: 12px 20px;
+      margin: 10px 5px;
       border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 18px;
-      padding: 16px;
-      transition: background 0.3s ease;
-    }
-
-    button:hover {
-      background: #914d5a;
-    }
-
-    .radio-group {
-      margin: 12px 0;
-      text-align: left;
-    }
-
-    .radio-group label {
-      font-weight: normal;
+      border-radius: 25px;
+      background: linear-gradient(135deg, #c71585, #b76e79);
+      color: #fff;
       font-size: 16px;
-      display: inline-block;
-      margin-right: 15px;
+      font-family: 'Playfair Display', serif;
+      cursor: pointer;
+      transition: transform .2s, background .3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,.2);
     }
-
-    .radio-group input {
-      margin-right: 6px;
+    button:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #a1126b, #944c56);
     }
-
-    #confirmationMessage {
-      display: none;
+    #status {
+      font-size: 16px;
+      font-weight: 500;
+      margin: 15px 0;
+      color: #333;
+    }
+    #rsvpForm {
+      background: #fff8f9;
+      padding: 20px;
+      border-radius: 15px;
       margin-top: 20px;
-      font-weight: bold;
-      color: #2e8b57;
+      box-shadow: inset 0 0 10px rgba(0,0,0,.05);
+      animation: fadeInUp 0.6s ease;
     }
-
-    /* Mobile-friendly adjustments */
-    @media (max-width: 600px) {
-      body {
-        padding: 15px;
-      }
-      .container {
-        padding: 20px;
-      }
-      h1 {
-        font-size: 28px;
-      }
-      p {
-        font-size: 16px;
-      }
-      .radio-group label {
-        display: block;
-        margin: 10px 0;
-      }
+    #editButtons { margin-top: 15px; }
+    label { margin-right: 15px; font-size: 16px; }
+    .hidden { display: none; }
+    #guestInputs input {
+      width: 90%;
+      padding: 10px 12px;
+      margin: 6px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      font-family: 'Playfair Display', serif;
+    }
+    #guestInputs .hint {
+      font-size: 12px;
+      opacity: .75;
+      margin-top: 4px;
+    }
+    .readonly { background: #f7f7f7; color: #444; }
+    @media(max-width:600px) {
+      input, textarea, button { width: 100%; }
+    }
+    /* Animations */
+    @keyframes fadeIn {
+      from {opacity: 0; transform: scale(0.95);}
+      to {opacity: 1; transform: scale(1);}
+    }
+    @keyframes fadeInUp {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Wedding RSVP</h1>
-    <p>We would love to know if you can celebrate with us!</p>
+    <h2>Wedding RSVP</h2>
+    <p class="subtitle">We can’t wait to celebrate with you! 💍</p>
 
-    <form id="rsvpForm">
-      <label for="name">Your Name</label>
-      <input type="text" id="name" name="name" required>
+    <input type="text" id="guestName" placeholder="Enter your full name">
+    <button onclick="checkName()">Continue</button>
 
-      <label>Will you attend?</label>
-      <div class="radio-group">
-        <label><input type="radio" name="attendance" value="Yes" required> Yes 💖</label>
-        <label><input type="radio" name="attendance" value="No"> No 💔</label>
+    <p id="status"></p>
+
+    <p id="editPrompt" class="hidden"></p>
+    <div id="editButtons" class="hidden">
+      <button onclick="startEditing()">Yes, edit RSVP</button>
+      <button onclick="cancelEditing()">No, keep it</button>
+    </div>
+
+    <div id="rsvpForm" class="hidden">
+      <p>Will you attend?</p>
+      <label><input type="radio" name="attendance" value="Yes" checked> Yes 💖</label>
+      <label><input type="radio" name="attendance" value="No"> No 💔</label><br>
+
+      <div id="updateSection" class="hidden">
+        <button onclick="submitRSVP()">Update RSVP</button>
       </div>
+    </div>
 
-      <label for="guests">Number of Guests (including you)</label>
-      <input type="text" id="guests" name="guests" required>
-
-      <label for="message">Message for the couple (optional)</label>
-      <textarea id="message" name="message"></textarea>
-
-      <button type="submit">Submit RSVP</button>
-    </form>
-
-    <div id="confirmationMessage">
-      Thank you for your response! 💍
+    <div id="guestDetails" class="hidden">
+      <input type="hidden" id="guestCount" min="0">
+      <div id="guestInputs"></div>
+      <textarea id="guestNames" class="hidden"></textarea><br>
+      <div id="submitSection" class="hidden">
+        <button onclick="submitRSVP()">Submit RSVP</button>
+      </div>
     </div>
   </div>
 
   <script>
-    document.getElementById("rsvpForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      document.getElementById("rsvpForm").style.display = "none";
-      document.getElementById("confirmationMessage").style.display = "block";
-    });
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzg22K276Q_YXBEowV2lHHF7cwIEom5VydMEEld5fhMTfC4E4ycyOkJRm1oazeh_SV1/exec";
+
+    const INCLUDE_MAIN_IN_SUBMIT = false;
+    const COUNT_INCLUDES_MAIN   = true;
+
+    let guestData = null;
+    let editingEnabled = false;
+
+    function renderGuestInputs(count, prefill = [], mainName = "") {
+      const box = document.getElementById("guestInputs");
+      box.innerHTML = "";
+      const n = Math.max(0, Number(count || 0));
+      if (n === 0) return;
+
+      const firstWrap = document.createElement("div");
+      const first = document.createElement("input");
+      first.type = "text";
+      first.id = "guest_1";
+      first.placeholder = "Guest 1 (You)";
+      first.value = mainName || "";
+      first.readOnly = true;
+      first.classList.add("readonly");
+      firstWrap.appendChild(first);
+      box.appendChild(firstWrap);
+
+      for (let i = 2; i <= n; i++) {
+        const wrap = document.createElement("div");
+        const input = document.createElement("input");
+        input.type = "text";
+        input.id = `guest_${i}`;
+        input.placeholder = `Guest ${i} full name`;
+        input.value = prefill[i - 2] || "";
+        wrap.appendChild(input);
+        box.appendChild(wrap);
+      }
+
+      const hint = document.createElement("div");
+      hint.className = "hint";
+      hint.textContent = "Tip: leave blanks for TBD guests—those will be ignored.";
+      box.appendChild(hint);
+    }
+
+    function getGuestNamesFromInputs() {
+      return Array.from(document.querySelectorAll("#guestInputs input"))
+        .map(el => el.value.trim())
+        .filter(v => v.length > 0);
+    }
+
+    function setFormEditable(enabled) {
+      const count = document.getElementById("guestCount");
+      const inputs = Array.from(document.querySelectorAll("#guestInputs input"));
+      const radios = Array.from(document.querySelectorAll('input[name="attendance"]'));
+
+      inputs.forEach((el, idx) => {
+        if (idx === 0) { el.readOnly = true; el.disabled = !enabled; el.classList.add("readonly"); }
+        else { el.readOnly = !enabled; el.disabled = !enabled; el.classList.toggle("readonly", !enabled); }
+      });
+
+      count.readOnly = !enabled;
+      count.disabled = !enabled;
+      radios.forEach(r => r.disabled = !enabled);
+    }
+
+    function updateVisibilityByAttendance() {
+      const selected = document.querySelector('input[name="attendance"]:checked')?.value || "Yes";
+      if (selected === "Yes") {
+        document.getElementById("guestDetails").classList.remove("hidden");
+        document.getElementById("submitSection").classList.toggle("hidden", !editingEnabled);
+        document.getElementById("updateSection").classList.add("hidden");
+      } else {
+        document.getElementById("guestDetails").classList.add("hidden");
+        document.getElementById("submitSection").classList.add("hidden");
+        document.getElementById("updateSection").classList.toggle("hidden", !editingEnabled);
+      }
+    }
+
+    async function checkName() {
+      const name = document.getElementById("guestName").value.trim();
+      if (!name) return alert("Please enter your name");
+
+      try {
+        const response = await fetch(WEB_APP_URL + "?name=" + encodeURIComponent(name));
+        if (!response.ok) throw new Error("Network error " + response.status);
+        const result = await response.json();
+
+        if (!result.exists) {
+          document.getElementById("status").innerText = "❌ Name not found in the guest list.";
+          hideFormAndButtons();
+          return;
+        }
+
+        guestData = result;
+        const planned = Number(result.plannedGuests || 0);
+        const prefillList = (result.additionalGuests || "")
+          .split(/\r?\n|,\s*/).map(s => s.trim()).filter(Boolean);
+
+        const guestCountInput = document.getElementById("guestCount");
+        guestCountInput.value = planned;
+        guestCountInput.max = planned;
+        guestCountInput.min = 0;
+
+        if (result.alreadyRegistered === "Yes") {
+          const remainingSeats = planned - Number(result.registeredGuests || 0);
+
+          if (remainingSeats <= 0) {
+            editingEnabled = false;
+            document.getElementById("status").innerText = "✅ Completed. Already Registered. You want to edit?";
+            renderGuestInputs(planned, prefillList, result.name);
+            setFormEditable(false);
+            document.getElementById("submitSection").classList.add("hidden");
+            document.getElementById("updateSection").classList.add("hidden");
+            document.getElementById("rsvpForm").classList.add("hidden");
+            document.getElementById("editPrompt").classList.remove("hidden");
+            document.getElementById("editButtons").classList.remove("hidden");
+          } else {
+            editingEnabled = false;
+            document.getElementById("status").innerText =
+              `⚠️ You already submitted, but there are ${remainingSeats} seat(s) left. Update?`;
+            renderGuestInputs(planned, prefillList, result.name);
+            setFormEditable(false);
+            document.getElementById("rsvpForm").classList.add("hidden");
+            document.getElementById("editPrompt").classList.remove("hidden");
+            document.getElementById("editButtons").classList.remove("hidden");
+          }
+        } else {
+          editingEnabled = true;
+          document.getElementById("status").innerText =
+            `🎉 Welcome ${result.name}! You have ${planned} planned guests under your name.`;
+          renderGuestInputs(planned, prefillList, result.name);
+          setFormEditable(true);
+          document.getElementById("rsvpForm").classList.remove("hidden");
+          document.getElementById("editPrompt").classList.add("hidden");
+          document.getElementById("editButtons").classList.add("hidden");
+        }
+
+        const attendanceRadios = document.getElementsByName('attendance');
+        attendanceRadios.forEach(r => r.addEventListener('change', updateVisibilityByAttendance));
+        updateVisibilityByAttendance();
+
+      } catch (err) {
+        console.error("Error in checkName:", err);
+        document.getElementById("status").innerText = "⚠️ Error connecting to server. Check console.";
+      }
+    }
+
+    function startEditing() {
+      editingEnabled = true;
+      document.getElementById("rsvpForm").classList.remove("hidden");
+      document.getElementById("status").innerText = `Hi ${guestData.name}, you can now edit your RSVP.`;
+      document.getElementById("editPrompt").classList.add("hidden");
+      document.getElementById("editButtons").classList.add("hidden");
+      document.getElementById("submitSection").classList.add("hidden");
+      setFormEditable(true);
+      updateVisibilityByAttendance();
+    }
+
+    function cancelEditing() {
+      hideFormAndButtons();
+      setFormEditable(false);
+      editingEnabled = false;
+      document.getElementById("status").innerText = "✅ RSVP remains unchanged.";
+    }
+
+    function hideFormAndButtons() {
+      document.getElementById("rsvpForm").classList.add("hidden");
+      document.getElementById("guestDetails").classList.add("hidden");
+      document.getElementById("submitSection").classList.add("hidden");
+      document.getElementById("updateSection").classList.add("hidden");
+      document.getElementById("editPrompt").classList.add("hidden");
+      document.getElementById("editButtons").classList.add("hidden");
+    }
+
+    async function submitRSVP() {
+      if (!guestData) return alert("Please check your name first!");
+
+      const attendance = document.querySelector('input[name="attendance"]:checked').value;
+
+      const namesAll = getGuestNamesFromInputs();
+      const namesForSubmit = INCLUDE_MAIN_IN_SUBMIT ? namesAll : namesAll.slice(1);
+      let guestNames = namesForSubmit.join("\n");
+
+      let guestCount = COUNT_INCLUDES_MAIN ? namesAll.length : Math.max(0, namesAll.length - 1);
+
+      if (attendance === "No") {
+        guestNames = "";
+        guestCount = 0;
+      }
+
+      document.getElementById("guestNames").value = guestNames;
+      document.getElementById("guestCount").value = String(guestCount);
+
+      try {
+        if (!WEB_APP_URL) {
+          document.getElementById("status").innerText = "⚠️ Set WEB_APP_URL to your Apps Script deployment.";
+          return;
+        }
+
+        const data = new URLSearchParams();
+        data.append("row", guestData.row);
+        data.append("name", guestData.name);
+        data.append("attendance", attendance);
+        data.append("guestCount", String(guestCount));
+        data.append("guestNames", guestNames);
+
+        const response = await fetch(WEB_APP_URL, { method: "POST", body: data });
+        const result = await response.json();
+        document.getElementById("status").innerText = result.message;
+
+        setFormEditable(false);
+        editingEnabled = false;
+        hideFormAndButtons();
+      } catch (err) {
+        console.error("Error in submitRSVP:", err);
+        document.getElementById("status").innerText = "⚠️ Failed to submit RSVP. Check console.";
+      }
+    }
   </script>
 </body>
 </html>
+
