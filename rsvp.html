@@ -1,161 +1,251 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Wedding RSVP</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Great+Vibes&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Playfair Display', serif;
-      background: linear-gradient(to bottom right, #fbeaea, #fdf6f0);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      padding: 20px;
+    /* ---------- Color System: Blue/Gray ---------- */
+    :root{
+      --bg-grad-a:#f2f5f9; --bg-grad-b:#e9eef5; --card:#ffffff; --ink:#0b1220; --muted:#5b677a;
+      --line:#e3e8ef; --navy:#0f2745; --navy-600:#14355f; --slate:#93a1b3; --sky:#cfe3ff; --accent:#2d72d9;
+      --rose:#b76e79; --success:#0f7b6c; --danger:#9b1c31; --shadow:0 14px 40px rgba(15,39,69,.12);
+      --inset:inset 0 0 0 1px rgba(20,53,95,.08); --radius:22px;
     }
-    .container {
-      background: #fff;
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,.15);
+
+    /* ---------- Layout ---------- */
+    html,body{height:100%}
+    body{
+      font-family:'Playfair Display', serif;
+      background:
+        radial-gradient(1200px 700px at 10% -10%, rgba(45,114,217,.05), transparent 60%),
+        radial-gradient(900px 600px at 120% 20%, rgba(15,39,69,.06), transparent 55%),
+        linear-gradient(to bottom right, var(--bg-grad-a), var(--bg-grad-b));
+      display:flex;justify-content:center;align-items:center;
+      margin:0;
+      padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+               max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+      color:var(--ink);
+      min-height: 100svh; /* handles mobile browser chrome */
+    }
+
+    .container{
+      background:var(--card);
+      /* fluid padding that scales with screen size */
+      padding: clamp(16px, 4vw, 44px) clamp(14px, 4vw, 40px);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow), var(--inset);
       width: 100%;
-      max-width: 520px;
-      text-align: center;
-      position: relative;
-      animation: fadeIn 0.8s ease;
+      /* Auto-stretch: min 320px, up to 96vw, allow roomy desktops up to 1400px */
+      max-width: clamp(320px, 96vw, 1400px);
+      text-align:center;position:relative;
+      animation:fadeIn .8s ease;
+      border:1px solid var(--line);
+      overflow:hidden;
     }
-    h2 {
-      font-family: 'Great Vibes', cursive;
-      font-size: 40px;
-      color: #b76e79;
-      margin-bottom: 10px;
+
+    /* Decorative corner */
+    .container::after{
+      content:"";
+      position:absolute; inset:auto -40px -40px auto;
+      width: clamp(100px, 22vw, 160px);
+      height: clamp(100px, 22vw, 160px);
+      border-radius:32px;
+      background:radial-gradient(120px 120px at 80% 80%, rgba(45,114,217,.12), transparent 60%);
+      filter:blur(2px);
+      pointer-events:none;
     }
-    p.subtitle {
-      font-size: 16px;
-      color: #666;
-      margin-bottom: 25px;
+
+    /* ---------- Typography ---------- */
+    h2{
+      font-family:'Great Vibes', cursive;
+      font-size: clamp(28px, 6vw, 56px);
+      line-height:1.08;
+      color:var(--navy);
+      margin:0 0 6px;
+      letter-spacing:.2px;
+      text-shadow:0 1px 0 rgba(255,255,255,.8);
     }
-    input[type="text"], textarea {
-      width: 90%;
-      padding: 12px 15px;
-      margin: 10px 0;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      font-size: 16px;
-      font-family: 'Playfair Display', serif;
-      transition: border-color .3s;
+    p.subtitle{
+      font-size: clamp(14px, 2.4vw, 18px);
+      color:var(--muted);
+      margin:4px 0 clamp(14px, 3vw, 24px);
     }
-    input:focus, textarea:focus {
-      border-color: #b76e79;
-      outline: none;
-      box-shadow: 0 0 6px rgba(183, 110, 121, 0.3);
+
+    /* ---------- Inputs ---------- */
+    input[type="text"], textarea{
+      width:100%;
+      padding: clamp(10px, 2.5vw, 14px) clamp(12px, 3vw, 18px);
+      margin: clamp(8px, 2vw, 10px) 0;
+      border-radius:12px;
+      border:1px solid var(--line);
+      font-size: clamp(14px, 2.4vw, 18px);
+      background:#fbfdff;
+      transition:border-color .25s, box-shadow .25s, background .25s;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.6);
     }
-    textarea {
-      resize: vertical;
-      min-height: 80px;
+    input[type="text"]::placeholder, textarea::placeholder{ color:#9aa6b2 }
+    input:focus, textarea:focus{
+      border-color:var(--accent);
+      outline:none;
+      box-shadow:0 0 0 4px rgba(45,114,217,.15);
+      background:#fff;
     }
-    button {
-      padding: 12px 20px;
-      margin: 10px 5px;
-      border: none;
-      border-radius: 25px;
-      background: linear-gradient(135deg, #c71585, #b76e79);
-      color: #fff;
-      font-size: 16px;
-      font-family: 'Playfair Display', serif;
-      cursor: pointer;
-      transition: transform .2s, background .3s ease;
-      box-shadow: 0 4px 12px rgba(0,0,0,.2);
+    textarea{ resize:vertical; min-height:84px }
+    .readonly{ background:#f3f6fa; color:#46556b }
+
+    label{ margin-right:16px; font-size: clamp(14px, 2.4vw, 18px); color:var(--ink) }
+    #status{ font-size: clamp(14px, 2.4vw, 18px); font-weight:600; margin:16px 0; color:var(--navy) }
+
+    /* ---------- Buttons ---------- */
+    .btn{
+      padding: clamp(10px, 2.6vw, 14px) clamp(16px, 3.2vw, 22px);
+      margin:10px 6px;
+      border:none; border-radius:999px;
+      background:linear-gradient(135deg, var(--navy), var(--navy-600));
+      color:#fff; font-size: clamp(14px, 2.6vw, 18px);
+      font-family:'Playfair Display', serif;
+      cursor:pointer; transition:transform .15s ease, box-shadow .25s ease, opacity .2s;
+      box-shadow:0 8px 20px rgba(15,39,69,.25);
+      display:inline-flex; align-items:center; gap:.5rem;
     }
-    button:hover {
-      transform: scale(1.05);
-      background: linear-gradient(135deg, #a1126b, #944c56);
+    .btn:hover{ transform:translateY(-1px); box-shadow:0 12px 24px rgba(15,39,69,.28) }
+    .btn:active{ transform:translateY(0) scale(.99) }
+    .btn--outline{
+      background:linear-gradient(#fff,#fff);
+      color:var(--navy); border:1px solid var(--navy);
+      box-shadow:none;
     }
-    #status {
-      font-size: 16px;
-      font-weight: 500;
-      margin: 15px 0;
-      color: #333;
+    .btn--muted{
+      background:linear-gradient(135deg, #73839a, #5d6c81);
     }
-    #rsvpForm {
-      background: #fff8f9;
-      padding: 20px;
-      border-radius: 15px;
-      margin-top: 20px;
-      box-shadow: inset 0 0 10px rgba(0,0,0,.05);
-      animation: fadeInUp 0.6s ease;
+
+    /* ---------- Cards / Sections ---------- */
+    #rsvpForm{
+      background:linear-gradient(180deg, #f7faff, #f1f5fb);
+      padding: clamp(14px, 3vw, 24px);
+      border-radius:16px; margin-top: clamp(10px, 2.8vw, 20px);
+      box-shadow:inset 0 0 0 1px rgba(20,53,95,.06);
+      border:1px solid var(--line);
+      animation:fadeInUp .6s ease;
     }
-    #editButtons { margin-top: 15px; }
-    label { margin-right: 15px; font-size: 16px; }
-    .hidden { display: none; }
-    #guestInputs input {
-      width: 90%;
-      padding: 10px 12px;
-      margin: 6px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-      font-family: 'Playfair Display', serif;
+    #guestDetails{
+      background:linear-gradient(180deg, #ffffff, #fafcff);
+      padding: clamp(14px, 3vw, 24px);
+      border-radius:16px; margin-top: clamp(10px, 2.8vw, 20px);
+      border:1px solid var(--line);
+      box-shadow:inset 0 0 0 1px rgba(20,53,95,.04);
     }
-    #guestInputs .hint {
-      font-size: 12px;
-      opacity: .75;
-      margin-top: 4px;
+    #guestInputs{ display: grid; gap: clamp(6px, 2vw, 12px); }
+    #guestInputs input{
+      width:100%;
+      padding: clamp(10px, 2.4vw, 12px) clamp(12px, 2.6vw, 14px);
+      border-radius:10px; border:1px solid var(--line);
+      background:#ffffff;
     }
-    .readonly { background: #f7f7f7; color: #444; }
-    @media(max-width:600px) {
-      input, textarea, button { width: 100%; }
+    #guestInputs .hint{ font-size: clamp(11px, 2.3vw, 12px); opacity:.8; color:#6b778a; margin-top:6px }
+
+    .hidden{ display:none }
+
+    /* ---------- Loading Overlay ---------- */
+    .loading {
+      position: fixed; inset: 0;
+      min-height: 100svh; /* fill viewport even with mobile browser UI */
+      background: rgba(255,255,255,.65);
+      backdrop-filter: blur(4px);
+      display: grid; place-items: center;
+      z-index: 9999;
     }
-    /* Animations */
-    @keyframes fadeIn {
-      from {opacity: 0; transform: scale(0.95);}
-      to {opacity: 1; transform: scale(1);}
+    .loading.hidden { display: none; }
+
+    .loading .loading-box{
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: clamp(12px, 3vw, 22px) clamp(14px, 3.6vw, 28px);
+      box-shadow: var(--shadow);
+      display: flex; align-items: center; gap: 12px;
+      color: var(--ink);
+      font-weight: 600;
+      max-width: 90vw;
     }
-    @keyframes fadeInUp {
-      from {opacity: 0; transform: translateY(20px);}
-      to {opacity: 1; transform: translateY(0);}
+
+    .spinner{
+      width: clamp(18px, 4.5vw, 28px);
+      height: clamp(18px, 4.5vw, 28px);
+      border-radius: 50%;
+      border: 3px solid #d8e0ea;
+      border-top-color: var(--accent);
+      animation: spin .8s linear infinite;
     }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Pointer lock while loading */
+    body.loading-lock { pointer-events: none; }
+    body.loading-lock #loadingOverlay { pointer-events: all; }
+
+    /* ---------- Responsive tweaks ---------- */
+    @media (max-width: 640px){
+      .btn{ width:100%; margin:6px 0; }
+      label{ display:inline-flex; align-items:center; margin:8px 12px 0 0; }
+    }
+
+    /* ---------- Motion accessibility ---------- */
+    @media (prefers-reduced-motion: reduce){
+      *{ animation: none !important; transition: none !important; }
+    }
+
+    /* ---------- Animations ---------- */
+    @keyframes fadeIn{ from{opacity:0; transform:scale(.97)} to{opacity:1; transform:scale(1)} }
+    @keyframes fadeInUp{ from{opacity:0; transform:translateY(14px)} to{opacity:1; transform:translateY(0)} }
   </style>
 </head>
 <body>
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="loading hidden" aria-live="polite" aria-busy="true">
+    <div class="loading-box">
+      <div class="spinner" aria-hidden="true"></div>
+      <p>Please wait… loading</p>
+    </div>
+  </div>
+
   <div class="container">
     <h2>Wedding RSVP</h2>
-    <p class="subtitle">We can’t wait to celebrate with you! 💍</p>
+    <p class="subtitle">We can’t wait to celebrate with you! ✨</p>
 
-    <input type="text" id="guestName" placeholder="Enter your full name">
-    <button onclick="checkName()">Continue</button>
+    <input type="text" id="guestName" placeholder="Enter your full name" />
+    <button class="btn" onclick="checkName()">Continue</button>
 
     <p id="status"></p>
 
     <p id="editPrompt" class="hidden"></p>
     <div id="editButtons" class="hidden">
-      <button onclick="startEditing()">Yes, edit RSVP</button>
-      <button onclick="cancelEditing()">No, keep it</button>
+      <button class="btn" onclick="startEditing()">Yes, edit RSVP</button>
+      <button class="btn btn--outline" onclick="cancelEditing()">No, keep it</button>
     </div>
 
     <div id="rsvpForm" class="hidden">
-      <p>Will you attend?</p>
-      <label><input type="radio" name="attendance" value="Yes" checked> Yes 💖</label>
-      <label><input type="radio" name="attendance" value="No"> No 💔</label><br>
-
-      <div id="updateSection" class="hidden">
-        <button onclick="submitRSVP()">Update RSVP</button>
+      <p style="margin:0 0 10px;color:#334155">Will you attend?</p>
+      <label><input type="radio" name="attendance" value="Yes" checked /> Yes 💙</label>
+      <label><input type="radio" name="attendance" value="No" /> No 💭</label><br />
+      <div id="updateSection" class="hidden" style="margin-top:10px">
+        <button class="btn btn--muted" onclick="submitRSVP()">Update RSVP</button>
       </div>
     </div>
 
     <div id="guestDetails" class="hidden">
-      <input type="hidden" id="guestCount" min="0">
+      <input type="hidden" id="guestCount" min="0" />
       <div id="guestInputs"></div>
-      <textarea id="guestNames" class="hidden"></textarea><br>
+      <textarea id="guestNames" class="hidden"></textarea><br />
       <div id="submitSection" class="hidden">
-        <button onclick="submitRSVP()">Submit RSVP</button>
+        <button class="btn" onclick="submitRSVP()">Submit RSVP</button>
       </div>
     </div>
   </div>
 
   <script>
+    /* Set to your Apps Script deployment URL */
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzg22K276Q_YXBEowV2lHHF7cwIEom5VydMEEld5fhMTfC4E4ycyOkJRm1oazeh_SV1/exec";
 
     const INCLUDE_MAIN_IN_SUBMIT = false;
@@ -163,6 +253,22 @@
 
     let guestData = null;
     let editingEnabled = false;
+
+    function showLoading(msg = "Please wait… loading") {
+      const ov = document.getElementById("loadingOverlay");
+      ov.querySelector("p").textContent = msg;
+      ov.classList.remove("hidden");
+      document.body.classList.add("loading-lock");
+    }
+    function hideLoading() {
+      document.getElementById("loadingOverlay").classList.add("hidden");
+      document.body.classList.remove("loading-lock");
+    }
+    function setDisabledWhileLoading(disabled = true) {
+      document.querySelectorAll(".container button, .container input, .container textarea").forEach(el => {
+        if (!el.closest("#loadingOverlay")) el.disabled = disabled;
+      });
+    }
 
     function renderGuestInputs(count, prefill = [], mainName = "") {
       const box = document.getElementById("guestInputs");
@@ -236,6 +342,8 @@
       const name = document.getElementById("guestName").value.trim();
       if (!name) return alert("Please enter your name");
 
+      showLoading("Checking your name…");
+      setDisabledWhileLoading(true);
       try {
         const response = await fetch(WEB_APP_URL + "?name=" + encodeURIComponent(name));
         if (!response.ok) throw new Error("Network error " + response.status);
@@ -298,6 +406,9 @@
       } catch (err) {
         console.error("Error in checkName:", err);
         document.getElementById("status").innerText = "⚠️ Error connecting to server. Check console.";
+      } finally {
+        hideLoading();
+        setDisabledWhileLoading(false);
       }
     }
 
@@ -336,7 +447,6 @@
       const namesAll = getGuestNamesFromInputs();
       const namesForSubmit = INCLUDE_MAIN_IN_SUBMIT ? namesAll : namesAll.slice(1);
       let guestNames = namesForSubmit.join("\n");
-
       let guestCount = COUNT_INCLUDES_MAIN ? namesAll.length : Math.max(0, namesAll.length - 1);
 
       if (attendance === "No") {
@@ -347,12 +457,14 @@
       document.getElementById("guestNames").value = guestNames;
       document.getElementById("guestCount").value = String(guestCount);
 
-      try {
-        if (!WEB_APP_URL) {
-          document.getElementById("status").innerText = "⚠️ Set WEB_APP_URL to your Apps Script deployment.";
-          return;
-        }
+      if (!WEB_APP_URL) {
+        document.getElementById("status").innerText = "⚠️ Set WEB_APP_URL to your Apps Script deployment.";
+        return;
+      }
 
+      showLoading("Submitting your RSVP…");
+      setDisabledWhileLoading(true);
+      try {
         const data = new URLSearchParams();
         data.append("row", guestData.row);
         data.append("name", guestData.name);
@@ -370,6 +482,9 @@
       } catch (err) {
         console.error("Error in submitRSVP:", err);
         document.getElementById("status").innerText = "⚠️ Failed to submit RSVP. Check console.";
+      } finally {
+        hideLoading();
+        setDisabledWhileLoading(false);
       }
     }
   </script>
